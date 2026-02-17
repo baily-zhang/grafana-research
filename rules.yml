@@ -1,0 +1,23 @@
+groups:
+  # ===== 场景 A：已移除（测试 AI 在无语义线索下的表现）=====
+  # - name: semantic_metrics
+  #   rules:
+  #     - record: legacy_corp_svc_cpu_tick_v2
+  #       expr: process_cpu_seconds_total
+  #     - record: legacy_corp_mem_usage_bytes
+  #       expr: process_resident_memory_bytes
+
+  # ===== 场景 B：无语义（AI 猜不到）=====
+  - name: opaque_metrics
+    rules:
+      # 实际是 CPU 使用时间，但名字像内部工单编号
+      - record: svc_kpi_007_v2
+        expr: process_cpu_seconds_total
+
+      # 实际是内存，但名字像资产追踪系统
+      - record: res_tracker_alpha
+        expr: process_resident_memory_bytes
+
+      # 实际是 HTTP 请求量，但名字完全无关
+      - record: opex_signal_42
+        expr: prometheus_http_requests_total

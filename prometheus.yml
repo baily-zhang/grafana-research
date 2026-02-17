@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+
+remote_write:
+  - url: "https://prometheus-prod-32-prod-ca-east-0.grafana.net/api/prom/push"
+    basic_auth:
+      username: "${GRAFANA_CLOUD_USERNAME:-YOUR_USERNAME}"
+      password: "${GRAFANA_CLOUD_TOKEN:-YOUR_TOKEN}"
+
+rule_files:
+  - "rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]

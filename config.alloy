@@ -1,0 +1,20 @@
+// Grafana Cloud - Alloy Configuration
+// Metrics: Prometheus remote write to Grafana Cloud
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "https://prometheus-prod-32-prod-ca-east-0.grafana.net/api/prom/push"
+
+    basic_auth {
+      username = env("GRAFANA_CLOUD_USERNAME")
+      password = env("GRAFANA_CLOUD_TOKEN")
+    }
+  }
+}
+
+// Scrape local Prometheus and forward to Grafana Cloud
+prometheus.scrape "local_prometheus" {
+  targets    = [{"__address__" = "prometheus:9090"}]
+  forward_to = [prometheus.remote_write.default.receiver]
+  scrape_interval = "15s"
+}
